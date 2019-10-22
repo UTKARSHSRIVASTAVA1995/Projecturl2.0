@@ -32,11 +32,14 @@ public class Utils {
 
     }
 
-    static ArrayList<String> getAllSharedPrefList(Context context){
+    static ArrayList<String> getAllSharedPrefList(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences((Constants.MyPreferences), Context.MODE_PRIVATE);
         ArrayList<String> arr = new ArrayList<>();
         Map<String, ?> allEntries = sharedPreferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet())
+        {
+
             Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
             arr.add(entry.getValue().toString());
         }

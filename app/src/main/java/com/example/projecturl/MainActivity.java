@@ -1,6 +1,7 @@
 package com.example.projecturl;
 
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,12 +11,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView1;
     private EditText url_Login;
-    private String address;
     private ImageView img_bookmark;
     private Button goBtn;
     private boolean isGoBtnClicked;
+    static int url = 1002;
 
     private SharedPreferences sharedPreferences;
     private boolean isBookmarked;
@@ -91,18 +94,18 @@ public class MainActivity extends AppCompatActivity {
                 isBookmarked = false;
             }
 
-            for(String str: Utils.getAllSharedPrefList(MainActivity.this) ){
-                if(str.equalsIgnoreCase(charSequence.toString())){
+            for (String str : Utils.getAllSharedPrefList(MainActivity.this)) {
+                if (str.equalsIgnoreCase(charSequence.toString())) {
                     showStar(true);
                     img_bookmark.setBackgroundResource(R.drawable.ic_star_filled);
                 }
             }
-
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
         }
+
     };
 
     private EditText.OnEditorActionListener onEditorActionListener = new EditText.OnEditorActionListener() {
@@ -137,8 +140,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void showStar(boolean toShow) {
         if (toShow) {
+
             img_bookmark.setVisibility(View.VISIBLE);
+
         } else {
+
             img_bookmark.setVisibility(View.GONE);
         }
     }
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+
             if (isGoBtnClicked) {
                 String url = url_Login.getText().toString();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -155,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "BookMarked : " + url, Toast.LENGTH_LONG).show();
                 img_bookmark.setBackgroundResource(R.drawable.ic_star_filled);
                 isBookmarked = true;
+
             }
         }
     };
@@ -166,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -174,12 +181,30 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.book_Mark) {
 
             Intent intent = new Intent(this, BookmarkList.class);
-            this.startActivity(intent);
-            return true;
+            startActivityForResult(intent, url);
         }
         return super.onOptionsItemSelected(item);
+
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == url && resultCode == 1002) ;
+
+        {
+
+            String url = data.getExtras().get("url").toString();
+
+            Utils.goToUrl(webView1, url);
+            showStar(true);
+            url_Login.setText(url);
+            img_bookmark.setBackgroundResource(R.drawable.ic_star_filled);
+
+
+        }
+    }
 }
 
 

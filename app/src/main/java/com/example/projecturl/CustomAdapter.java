@@ -1,5 +1,6 @@
 package com.example.projecturl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,15 +16,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
     private ArrayList<String> arrayList;
-    private Context context;
+    private Activity context;
+    private Intent intent;
 
-
-    public CustomAdapter(Context context, ArrayList<String> arrayList) {
+    public CustomAdapter(Activity context, ArrayList<String> arrayList,Intent intent) {
         this.arrayList = arrayList;
         this.context = context;
+        this.intent = intent;
     }
 
     @Override
@@ -51,22 +55,24 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
         }
 
-        TextView tvUrl = view.findViewById(R.id.tv_1);
+        final TextView tvUrl = view.findViewById(R.id.tv_1);
         Button delete = view.findViewById(R.id.btn_1);
         final String item = arrayList.get(position);
-
         tvUrl.setText(item);
+
 
         view.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+
                 Toast.makeText(context, item, Toast.LENGTH_SHORT).show();
-                Intent mIntent = new Intent(context, MainActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putString("Url", item);
-                mIntent.putExtras(mBundle);
-                context.startActivity(mIntent);
+
+                tvUrl.setText(item);
+                Intent intent = new Intent();
+                intent.putExtra("url",item);
+                context.setResult(RESULT_OK, intent);
+                context.finish();
             }
         });
 
