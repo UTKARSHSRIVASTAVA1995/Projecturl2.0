@@ -87,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             isGoBtnClicked = false;
             showStar(false);
+
             if (isBookmarked) {
                 img_bookmark.setBackgroundResource(R.drawable.ic_star_border_filled);
                 isBookmarked = false;
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private EditText.OnEditorActionListener onEditorActionListener = new EditText.OnEditorActionListener() {
+
         @Override
         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
+
         @Override
         public void onClick(View view) {
             callType();
@@ -182,27 +186,38 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, BookmarkList.class);
             startActivityForResult(intent, url);
+
         }
+
         return super.onOptionsItemSelected(item);
 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == url && resultCode == 1002) ;
 
         {
+            if (data != null)
+            {
+                String url = data.getExtras().get("url").toString();
 
-            String url = data.getExtras().get("url").toString();
+                Utils.goToUrl(webView1, url);
+                showStar(true);
+                {
+                    url_Login.setText(url);
+                    img_bookmark.setBackgroundResource(R.drawable.ic_star_border_filled);
+                    if (url.contains("www")) {
+                        Utils.goToUrl(webView1, url);
+                    } else {
+                        Utils.search(webView1, url);
 
-            Utils.goToUrl(webView1, url);
-            showStar(true);
-            url_Login.setText(url);
-            img_bookmark.setBackgroundResource(R.drawable.ic_star_filled);
+                    }
+                }
 
-
+            }
         }
     }
 }

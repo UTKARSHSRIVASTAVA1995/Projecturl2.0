@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +72,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 intent.putExtra("url",item);
                 context.setResult(RESULT_OK, intent);
                 context.finish();
+
             }
         });
 
