@@ -84,9 +84,11 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 SharedPreferences sharedPreferences = context.getSharedPreferences((Constants.MyPreferences), Context.MODE_PRIVATE);
                 sharedPreferences.edit().remove(str).apply();
                 arrayList.remove(position);
-                notifyDataSetChanged();
+               // notifyDataSetChanged();
             }
         });
+
+
         return view;
     }
 }
